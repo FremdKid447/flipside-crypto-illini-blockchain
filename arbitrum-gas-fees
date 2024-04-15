@@ -1,0 +1,15 @@
+SELECT
+  trunc(block_timestamp, 'month') as time,
+  AVG(CUMULATIVE_GAS_USED),
+  AVG(GAS_PRICE_PAID),
+  AVG(ETH_VALUE)
+FROM
+  arbitrum.core.fact_transactions
+WHERE 
+  status = 'SUCCESS'
+GROUP BY
+  time
+ORDER BY
+  time DESC
+LIMIT
+  1000
