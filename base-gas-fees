@@ -1,0 +1,12 @@
+SELECT
+  trunc(block_timestamp, 'day') as time,
+  AVG(GAS_PRICE),
+  AVG(ETH_VALUE)
+FROM
+  base.goerli.fact_transactions
+WHERE 
+  status = 'SUCCESS'
+GROUP BY
+  time
+ORDER BY
+  time DESC
