@@ -1,0 +1,14 @@
+SELECT
+  trunc(block_timestamp, 'month') as time,
+  AVG(GAS_PRICE),
+  AVG(ETH_VALUE)
+FROM
+  ethereum.core.fact_transactions
+WHERE 
+  status = 'SUCCESS'
+GROUP BY
+  time
+ORDER BY
+  time DESC
+LIMIT
+  1000
