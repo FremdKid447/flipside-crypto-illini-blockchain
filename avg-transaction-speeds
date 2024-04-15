@@ -1,0 +1,48 @@
+with ethereum as (select
+  date_trunc(day, block_timestamp) as date,
+  count(*)/1440 as tx_per_min,
+  'Ethereum' as type
+  from ethereum.core.fact_transactions
+  	where block_timestamp::date < CURRENT_DATE and block_timestamp::date >= '2022-05-09' and status = 'SUCCESS'
+  group by date
+), solana as (select
+  date_trunc(day, block_timestamp) as date,
+  count(*)/1440 as tx_per_min,
+  'Solana' as type
+  from solana.core.fact_transactions
+  	where block_timestamp::date < CURRENT_DATE and block_timestamp::date >= '2022-05-09' and succeeded = True
+  group by date
+), polygon as (select
+  date_trunc(day, block_timestamp) as date,
+  count(*)/1440 as tx_per_min,
+  'Polygon' as type
+  from polygon.core.fact_transactions
+  	where block_timestamp::date < CURRENT_DATE and block_timestamp::date >= '2022-05-09' and status = 'SUCCESS'
+  group by date
+), optimism as (select
+  date_trunc(day, block_timestamp) as date,
+  count(*)/1440 as tx_per_min,
+  'Optimism' as type
+  from optimism.core.fact_transactions
+  	where block_timestamp::date < CURRENT_DATE and block_timestamp::date >= '2022-05-09' and status = 'SUCCESS'
+  group by date
+), arbitrum as (select
+  date_trunc(day, block_timestamp) as date,
+  count(*)/1440 as tx_per_min,
+  'Arbitrum' as type
+  from arbitrum.core.fact_transactions
+  	where block_timestamp::date < CURRENT_DATE and block_timestamp::date >= '2022-05-09' and status = 'SUCCESS'
+  group by date
+)
+
+
+
+  select avg(tx_per_min) as total_avg_speed, type from ethereum group by type
+    UNION
+  select avg(tx_per_min) as total_avg_speed, type from solana group by type
+    UNION
+  select avg(tx_per_min) as total_avg_speed, type from polygon group by type
+    UNION
+  select avg(tx_per_min) as total_avg_speed, type from arbitrum group by type
+    UNION
+  select avg(tx_per_min) as total_avg_speed, type from optimism group by type
