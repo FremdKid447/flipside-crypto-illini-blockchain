@@ -1,0 +1,13 @@
+SELECT
+  trunc(block_timestamp, 'month') as time,
+  AVG(CUMULATIVE_GAS_USED),
+  AVG(GAS_PRICE),
+  AVG(ETH_VALUE)
+FROM
+  optimism.core.fact_transactions
+WHERE 
+  status = 'SUCCESS'
+GROUP BY
+  time
+ORDER BY
+  time DESC
